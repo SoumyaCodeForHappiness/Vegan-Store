@@ -1,0 +1,119 @@
+<div class="main">
+    <div class="row no-gutters">
+        <nav>
+            <div class="container">
+                <ul class="navbar-left">
+                    <li><a (click)="routeToHome()">Home</a></li>
+                    <li>
+                        <div class="wrap">
+                            <div class="search">
+                                <input type="text" class="searchTerm" placeholder="What are you looking for?" [(ngModel)]="searchProduct">
+                                <button type="submit" class="searchButton" (click)="findProduct()">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <!--end navbar-left -->
+
+                <ul class="navbar-right">
+                    <li><a (click)="goToCheckout()" id="cart"><i class="fa fa-shopping-cart"></i> Cart <span class="badge">{{cart.length}}</span></a>
+                    </li>
+                </ul>
+                <!--end navbar-right -->
+            </div>
+            <!--end container -->
+        </nav>
+        <div class="col-md-3">
+            <div class="leftSide">
+                <div class="leftPanel">
+                    <mat-accordion>
+                        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Filter by Category
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <mat-checkbox class="example-margin" [checked]="routeParamsObj.value && routeParamsObj.category === 'grocery'" (change)="changeInCategory('grocery',$event.checked)">Grocery</mat-checkbox><br>
+                            <mat-checkbox class="example-margin" [checked]="routeParamsObj.value && routeParamsObj.category === 'dairy'" (change)="changeInCategory('dairy',$event.checked)">Dairy</mat-checkbox><br>
+                            <mat-checkbox class="example-margin" [checked]="routeParamsObj.value && routeParamsObj.category === 'confectionery'" (change)="changeInCategory('confectionery',$event.checked)">Confectionery</mat-checkbox><br>
+                            <mat-checkbox class="example-margin" [checked]="routeParamsObj.value && routeParamsObj.category === 'fruits'" (change)="changeInCategory('fruits',$event.checked)">Fruits & Vegetables</mat-checkbox><br>
+                            <mat-checkbox class="example-margin" [checked]="routeParamsObj.value && routeParamsObj.category === 'health'" (change)="changeInCategory('health',$event.checked)">Health & Beauty</mat-checkbox><br>
+                            <mat-checkbox class="example-margin" [checked]="routeParamsObj.value && routeParamsObj.category === 'household'" (change)="changeInCategory('household',$event.checked)">Household</mat-checkbox>
+                        </mat-expansion-panel>
+                        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Sort by Price
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <mat-form-field appearance="fill">
+                                <mat-label>By Price</mat-label>
+                                <mat-select [ngModel]="selectedSortByPrice" (ngModelChange)="changeinSortBy($event)">
+                                    <mat-option *ngFor="let price of priceArr" [value]="price.value">
+                                        {{price.viewValue}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </mat-expansion-panel>
+                        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Sort by Alphabet
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <mat-form-field appearance="fill">
+                                <mat-label>By Alphabet</mat-label>
+                                <mat-select [ngModel]="selectedSortByAlphabet" (ngModelChange)="changeinSortBy($event)">
+                                    <mat-option *ngFor="let alphabet of alphabetArr" [value]="alphabet.value">
+                                        {{alphabet.viewValue}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="products">
+                <!-- <h1>Fruits & Vegetables</h1> -->
+                <div class="product" *ngFor="let prod of productList">
+                    <img src={{prod.image}}>
+                    <h1>{{prod.name}}</h1>
+                    <span>
+                        <div class="offer">
+                            <div>Selling price: {{prod.selling_price}}<span class="price-down">-{{prod.discount}}</span>
+                            </div>
+                            <span class="price-old">Original Price: {{prod.original_price}}</span>
+                        </div>
+                        <div class="rating">
+                            <div class="d-flex flex-row justify-content-between align-items-center  mt-4  rounded">
+                                <div class="d-flex flex-row align-self-center product_data"  id="qty_select">
+                                  <input type="hidden" value=" 1 " class="prod_id">
+                                  <div class="input-group text-center" id="qty_selector">
+                                    <a class="decrement-btn" (click)="decrementQuantity(prod)">
+                                      <i class="fa fa-minus" style="padding-left:9px"></i>
+                                    </a>
+                                    <input type="text" readonly="readonly" id="qty_display" class="qty-input text-center" [(ngModel)]="prod.quantity"/>
+                                    <a class="increment-btn" (click)="incrementQuantity(prod)">
+                                      <i class="fa fa-plus" ></i>
+                                    </a>
+                                  </div>
+                               </div>
+                               </div>
+                        </div>
+                    </span>
+                    <div class="price" (click)="addToCart(prod)">
+                        Add to Cart
+                    </div>
+                </div>
+            </div>
+            <!-- <mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+                (page)="pageEvent = $event" aria-label="Select page">
+            </mat-paginator> -->
+        </div>
+    </div>
+</div>
+<app-footer></app-footer>
